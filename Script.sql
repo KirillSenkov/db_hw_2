@@ -67,8 +67,9 @@ create table tracks (id serial primary key,
                      track_name varchar(128) not null,
                      track_length interval not null
                      );
+select * from tracks
 do $$declare
-  trac_kid_seq integer := 1;
+  track_id_seq integer := 1;
   i albums.id%type;
   j integer;
 begin
@@ -81,9 +82,9 @@ begin
                                  substring(array_to_string(ARRAY(SELECT chr((65 + round((random() * 25 + generate_series)
                                                                         :: integer % 25 )) :: integer)
                                                            FROM generate_series(1, 60)), ''), 0, 7) || '_' || j,
-                                 interval '1 minute' * random()
+                                 interval '1 minute' * (random() * (10 - 1) + 1)
                                 );
-      trackidseq := trac_kid_seq + 1;
+      track_id_seq := track_id_seq + 1;
     end loop;
   end loop;
   commit;
